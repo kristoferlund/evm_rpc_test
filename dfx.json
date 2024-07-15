@@ -1,0 +1,33 @@
+{
+  "canisters": {
+    "evm_rpc_test_backend": {
+      "candid": "src/evm_rpc_test_backend/evm_rpc_test_backend.did",
+      "package": "evm_rpc_test_backend",
+      "type": "rust"
+    },
+    "evm_rpc": {
+      "candid": "https://github.com/internet-computer-protocol/evm-rpc-canister/releases/latest/download/evm_rpc.did",
+      "declarations": {
+        "output": "packages/evm_rpc/declarations"
+      },
+      "init_arg": "(record { nodesInSubnet = 28 })",
+      "remote": {
+        "candid": "packages/evm_rpc/evm_rpc.did",
+        "id": {
+          "ic": "7hfb6-caaaa-aaaar-qadga-cai"
+        }
+      },
+      "specified_id": "7hfb6-caaaa-aaaar-qadga-cai",
+      "type": "custom",
+      "wasm": "https://github.com/internet-computer-protocol/evm-rpc-canister/releases/latest/download/evm_rpc.wasm.gz"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

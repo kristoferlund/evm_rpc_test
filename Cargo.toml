@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "src/evm_rpc_test_backend"
+]
+resolver = "2"

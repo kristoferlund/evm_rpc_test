@@ -1,0 +1,5 @@
+type LogItem = record { level : LogLevel; message : text; timestamp : nat64 };
+type LogLevel = variant { Error; Info; Warn; Debug };
+service : {
+    logs : () -> (vec LogItem) query;
+}
