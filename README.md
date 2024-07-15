@@ -1,5 +1,8 @@
 # `evm_rpc_test`
 
+> [!NOTE]
+> Test the Internet Computer EVM RPC implementation. Run the same RPC call on all supported EVM chains and providers. See output in dfx console or, access the `logs()` query via the Candid interface.  
+
 Welcome to your new `evm_rpc_test` project and to the Internet Computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
 
 To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.
