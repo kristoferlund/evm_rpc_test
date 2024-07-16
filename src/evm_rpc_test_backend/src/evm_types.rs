@@ -59,7 +59,7 @@ pub enum RpcServices {
     EthMainnet(Option<Vec<EthMainnetService>>),
     ArbitrumOne(Option<Vec<L2MainnetService>>),
     BaseMainnet(Option<Vec<L2MainnetService>>),
-    Optimism(Option<Vec<L2MainnetService>>),
+    OptimismMainnet(Option<Vec<L2MainnetService>>),
 }
 
 #[derive(CandidType, Deserialize, Debug, Clone)]
