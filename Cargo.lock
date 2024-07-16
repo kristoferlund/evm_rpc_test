@@ -295,6 +295,8 @@ dependencies = [
  "ic-cdk",
  "ic-cdk-timers",
  "lazy_static",
+ "num-bigint",
+ "num-traits",
  "serde",
  "serde_bytes",
  "serde_json",

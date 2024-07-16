@@ -1,15 +1,15 @@
 mod evm_types;
 mod logger;
 
-use std::time::Duration;
-
 use evm_types::{
-    BlockTag, EthMainnetService, EthSepoliaService, FeeHistoryArgs, L2MainnetService, RpcServices,
-    EVM_RPC,
+    BlockTag, EthMainnetService, EthSepoliaService, FeeHistoryArgs, FeeHistoryResult,
+    L2MainnetService, MultiFeeHistoryResult, RpcServices, EVM_RPC,
 };
 use ic_cdk::{init, query};
 use lazy_static::lazy_static;
 use logger::{error, info, LogItem};
+use num_traits::Zero;
+use std::time::Duration;
 
 const CYCLES: u128 = 30_000_000_000;
 const BLOCK_COUNT: u64 = 4;
@@ -55,8 +55,42 @@ fn get_fees(rpc_services: RpcServices) {
             )
             .await;
         match result {
-            Ok(_) => {
-                info(format!("✅, {:?}", rpc_services).as_str());
+            Ok((MultiFeeHistoryResult::Consistent(FeeHistoryResult::Ok(fee_history)),)) => {
+                match fee_history {
+                    Some(fee_history) => {
+                        if fee_history.baseFeePerGas.is_empty() {
+                            error(
+                                format!("🛑, {:?}, No baseFeePerGas returned.", rpc_services)
+                                    .as_str(),
+                            );
+                            return;
+                        }
+
+                        for base_fee in fee_history.baseFeePerGas.iter() {
+                            if base_fee.0.is_zero() {
+                                error(
+                                    format!(
+                                        "🛑, {:?}, baseFeePerGas is 0. baseFeePerGas: {:?}",
+                                        rpc_services, fee_history.baseFeePerGas
+                                    )
+                                    .as_str(),
+                                );
+                                return;
+                            }
+                        }
+
+                        info(format!("✅, {:?}", rpc_services).as_str());
+                    }
+                    None => {
+                        error(format!("🛑, {:?}, No fee history returned.", rpc_services).as_str());
+                    }
+                };
+            }
+            Ok((MultiFeeHistoryResult::Consistent(FeeHistoryResult::Err(e)),)) => {
+                error(format!("🛑, {:?}, Consistent result / Err: {:?}", rpc_services, e).as_str());
+            }
+            Ok((MultiFeeHistoryResult::Inconsistent(_),)) => {
+                error(format!("🛑, {:?}, Inconsistent result", rpc_services).as_str());
             }
             Err(e) => {
                 error(format!("🛑, {:?}, Err: {:?}", rpc_services, e).as_str());
